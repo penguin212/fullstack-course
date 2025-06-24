@@ -3,10 +3,13 @@ import PhonebookEntry from './components/PhonebookEntry'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: "2" }
+    { name: 'Arto Hellas', number: "2" },
+    { name: 'Artur', number: "4" },
+    { name: 'John', number: "12" }
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -15,6 +18,15 @@ const App = () => {
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value)
+  }
+
+  const filteredList = filter === "" 
+    ? persons 
+    : persons.filter((person) => 
+      person.name.toLowerCase().includes(filter.toLowerCase()))
 
   const handleAddName = (event) => {
     event.preventDefault()
@@ -40,6 +52,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <p>filter with <input value={filter} onChange={handleFilterChange}/></p>
+      <h3>add new</h3>
       <form onSubmit={handleAddName}>
         <div>
           name: <input value={newName} onChange={handleNameChange}/>
@@ -53,7 +67,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <p>
-        {persons.map((person) => <PhonebookEntry 
+        {filteredList.map((person) => <PhonebookEntry 
           name={person.name} 
           number={person.number} 
           key={person.name}
