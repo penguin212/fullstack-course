@@ -20,6 +20,14 @@ const App = () => {
       })
   }, [])
 
+  const removalFunc = (id) =>{
+    if(window.confirm(`delete ${persons.find((p) => p.id === id).name}?`)){
+      personService.remove(id).then(
+        setPersons(persons.filter((person) => person.id !== id))
+      )
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -81,7 +89,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons personsList={filteredList} />
+      <Persons personsList={filteredList} removalFunc={removalFunc} />
       
     </div>
   )
