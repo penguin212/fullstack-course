@@ -28,11 +28,11 @@ const App = () => {
     }
   }
 
-  const handleNameChange = (event) => {
+  const handleNewNameChange = (event) => {
     setNewName(event.target.value)
   }
 
-  const handleNumberChange = (event) => {
+  const handleNewNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
 
@@ -48,7 +48,19 @@ const App = () => {
   const handleAddName = (event) => {
     event.preventDefault()
     if(persons.filter((person) => person.name === newName).length > 0){
-      alert(`${newName} is already added to the phonebook`)
+      if(window.confirm(`${newName} is already added to the phonebook, replace with the new number?`)){
+        const nameObject = {
+          name: newName,
+          number: newNumber
+        }
+        personService
+          .update(persons.find((p) => p.name === newName).id, nameObject)
+          .then(
+            setPersons(persons.filter((p) => p.name !== newName).concat(
+              nameObject
+            ))
+          )
+      }
       return
     }
     if(persons.filter((person) => person.number === newNumber).length > 0){
@@ -82,9 +94,9 @@ const App = () => {
       <PersonForm 
         handleAddName={handleAddName}
         newName={newName}
-        handleNameChange={handleNameChange}
+        handleNameChange={handleNewNameChange}
         newNumber={newNumber}
-        handleNumberChange={handleNumberChange}
+        handleNumberChange={handleNewNumberChange}
       />
 
       <h2>Numbers</h2>
